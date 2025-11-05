@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "title": "Golden Sunset",
+    "category": "Nature",
+    "tags": ["sunset", "sky", "gold"],
+    "image": "images/sunset.jpg",
+    "downloads": 2450,
+    "featured": true,
+    "colors": ["#f2a03d", "#1a1a1a"]
+  }
+]
