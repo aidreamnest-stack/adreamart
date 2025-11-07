@@ -243,20 +243,17 @@ sidebar.querySelectorAll('a').forEach(a => a.onclick = () => {
   sidebar.classList.remove('show');
   overlay.classList.remove('show');
 });
-  // ✅ Works for both local and GitHub Pages subfolders
+  // ✅ Fix sidebar link navigation on subpages
 document.querySelectorAll('#sidebar a').forEach(link => {
   link.addEventListener('click', (e) => {
     const href = link.getAttribute('href');
-    // Only handle relative paths
-    if (href.startsWith('./') || href.startsWith('../')) return;
-
-    e.preventDefault();
-    // Auto-detect base path (important for GitHub Pages)
-    const base = window.location.pathname.split('/')[1];
-    const fullURL = `${window.location.origin}/${base}${href}`;
-    window.location.href = fullURL;
+    if (href.startsWith('/')) {
+      e.preventDefault();
+      const fullURL = window.location.origin + '/adreamart' + href;
+      window.location.href = fullURL;
+    }
   });
-});
+  });
 
 </script>
 </body>
