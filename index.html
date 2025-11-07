@@ -4,66 +4,101 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>A Dream Art — Wallpapers</title>
-  <link rel="icon" href="https://ik.imagekit.io/h2tos5anh/photo_2025-11-07_09-52-15.jpg" type="image/png">
+  <link rel="icon" href="https://ik.imagekit.io/lbmgfujrk/favicon.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Poppins',sans-serif;background:#0d0d0d;color:#fff;line-height:1.6;overflow-x:hidden}
-    header{padding:15px 20px;display:flex;flex-direction:column;align-items:center;background:#000;position:relative}
-    .logo{font-family:'Dancing Script',cursive;font-size:2.2rem;color:#fff;text-align:center}
+    
+    :root {
+      --bg-primary: #0d0d0d;
+      --bg-secondary: #000;
+      --bg-card: #111;
+      --text-primary: #fff;
+      --text-secondary: #ccc;
+      --border-color: #333;
+      --overlay-bg: rgba(0,0,0,0.5);
+      --card-shadow: rgba(0,0,0,.5);
+    }
+    
+    [data-theme="light"] {
+      --bg-primary: #f5f5f5;
+      --bg-secondary: #fff;
+      --bg-card: #fff;
+      --text-primary: #000;
+      --text-secondary: #555;
+      --border-color: #ddd;
+      --overlay-bg: rgba(0,0,0,0.3);
+      --card-shadow: rgba(0,0,0,.2);
+    }
+    
+    body{font-family:'Poppins',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;overflow-x:hidden;transition:background 0.3s, color 0.3s}
+    header{padding:15px 20px;display:flex;flex-direction:column;align-items:center;background:var(--bg-secondary);position:relative;transition:background 0.3s}
+    .logo{font-family:'Dancing Script',cursive;font-size:2.2rem;color:var(--text-primary);text-align:center;transition:color 0.3s}
+    
+    #themeToggle{position:absolute;top:20px;left:20px;background:transparent;border:2px solid var(--text-primary);color:var(--text-primary);border-radius:8px;padding:8px 12px;cursor:pointer;font-weight:600;z-index:1001;transition:all 0.3s}
+    #themeToggle:hover{background:var(--text-primary);color:var(--bg-secondary)}
+    
     #hamburger{position:absolute;top:20px;right:20px;width:25px;height:20px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;z-index:1001}
-    #hamburger span{height:3px;background:#fff;border-radius:2px;transition:all 0.4s}
+    #hamburger span{height:3px;background:var(--text-primary);border-radius:2px;transition:all 0.4s}
     #hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
     #hamburger.active span:nth-child(2){opacity:0}
     #hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-    #overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);opacity:0;visibility:hidden;transition:opacity 0.4s;z-index:1040}
+    #overlay{position:fixed;inset:0;background:var(--overlay-bg);opacity:0;visibility:hidden;transition:opacity 0.4s;z-index:1040}
     #overlay.show{opacity:1;visibility:visible}
-    #sidebar{position:fixed;top:0;left:-300px;width:300px;height:100%;background:#111;display:flex;flex-direction:column;padding-top:80px;transition:transform 0.45s cubic-bezier(.77,0,.175,1);z-index:1050}
+    #sidebar{position:fixed;top:0;left:-300px;width:300px;height:100%;background:var(--bg-card);display:flex;flex-direction:column;padding-top:80px;transition:transform 0.45s cubic-bezier(.77,0,.175,1), background 0.3s;z-index:1050}
     #sidebar.show{transform:translateX(300px)}
-    #sidebar a{color:#fff;text-decoration:none;padding:15px 25px;font-weight:600;border-bottom:1px solid #333}
-    #sidebar a:hover{background:#fff;color:#000}
+    #sidebar a{color:var(--text-primary);text-decoration:none;padding:15px 25px;font-weight:600;border-bottom:1px solid var(--border-color);transition:all 0.3s}
+    #sidebar a:hover{background:var(--text-primary);color:var(--bg-secondary)}
     section{padding:40px 20px;max-width:1200px;margin:auto}
     .section-title{font-family:'Dancing Script',cursive;font-size:2rem;margin-bottom:10px}
     .controls{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:25px;align-items:center}
-    .search-input,.category-select{padding:10px 14px;border:none;border-radius:8px;font-size:1rem}
-    .search-input{flex:1;min-width:220px}
-    .category-select{background:#fff;color:#000;font-weight:600}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px}
-    .card-wrap{perspective:1000px}
+    .search-input,.category-select{padding:10px 14px;border:none;border-radius:8px;font-size:1rem;transition:background 0.3s, color 0.3s}
+    .search-input{flex:1;min-width:220px;background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border-color)}
+    .category-select{background:var(--bg-card);color:var(--text-primary);font-weight:600;border:1px solid var(--border-color)}
+    
+    .category-section{margin-bottom:50px}
+    .category-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .category-title{font-family:'Dancing Script',cursive;font-size:1.8rem}
+    .carousel-controls{display:flex;gap:10px}
+    .carousel-btn{background:var(--bg-card);border:2px solid var(--text-primary);color:var(--text-primary);width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+    .carousel-btn:hover{background:var(--text-primary);color:var(--bg-secondary)}
+    .carousel-btn:disabled{opacity:0.3;cursor:not-allowed}
+    
+    .carousel-container{position:relative;overflow:hidden}
+    .carousel-track{display:flex;gap:22px;transition:transform 0.4s ease;padding:10px 0}
+    
+    .card-wrap{flex:0 0 280px;perspective:1000px}
     .card-inner{position:relative;width:100%;aspect-ratio:3/4;transform-style:preserve-3d;transition:transform .6s;cursor:pointer;border-radius:12px;overflow:hidden}
     .card-inner.is-flipped{transform:rotateY(180deg)}
-    .card-front,.card-back{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;overflow:hidden;box-shadow:0 8px 18px rgba(0,0,0,.5)}
+    .card-front,.card-back{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;overflow:hidden;box-shadow:0 8px 18px var(--card-shadow);transition:box-shadow 0.3s}
     .card-front{transform:rotateY(0deg);z-index:2}
     .card-front img{width:100%;height:100%;object-fit:cover}
-    .card-back{
-      background:#000;
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      gap:12px;
-      padding:18px;
-      transform:rotateY(180deg);
-      backface-visibility:hidden; /* ✅ Fixed mirrored text */
-    }
+    .card-back{background:var(--bg-card);color:var(--text-primary);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:18px;transform:rotateY(180deg) scaleX(-1);border:1px solid var(--border-color)}
     .card-inner.is-flipped .card-front{transform:rotateY(180deg)}
-    .card-inner.is-flipped .card-back{transform:rotateY(180deg)}
-    .btn{padding:8px 14px;border-radius:999px;background:#fff;color:#000;font-weight:700;cursor:pointer;border:none}
-    .btn.alt{background:transparent;border:2px solid #fff;color:#fff}
+    .card-inner.is-flipped .card-back{transform:rotateY(360deg) scaleX(-1)}
+    .btn{padding:8px 14px;border-radius:999px;background:var(--text-primary);color:var(--bg-secondary);font-weight:700;cursor:pointer;border:none;transition:all 0.3s}
+    .btn.alt{background:transparent;border:2px solid var(--text-primary);color:var(--text-primary)}
+    .btn:hover{transform:scale(1.05)}
     .caption{font-family:'Dancing Script',cursive;margin-top:10px;text-align:center}
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:2000;padding:20px}
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:var(--overlay-bg);z-index:2000;padding:20px}
     .modal.show{display:flex}
-    .modal-img{max-width:100%;max-height:90vh;border-radius:8px}
-    .modal-close{position:absolute;top:18px;right:18px;background:transparent;border:2px solid #fff;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
-    footer{background:#000;padding:18px;text-align:center;color:#ccc;margin-top:40px}
-    footer a{color:#fff;text-decoration:none;margin:0 6px}
+    .modal-img{max-width:100%;max-height:90vh;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.7)}
+    .modal-close{position:absolute;top:18px;right:18px;background:transparent;border:2px solid var(--text-primary);color:var(--text-primary);border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer;transition:all 0.3s}
+    .modal-close:hover{background:var(--text-primary);color:var(--bg-secondary)}
+    footer{background:var(--bg-secondary);padding:18px;text-align:center;color:var(--text-secondary);margin-top:40px;transition:background 0.3s, color 0.3s}
+    footer a{color:var(--text-primary);text-decoration:none;margin:0 6px;transition:color 0.3s}
+    
+    @media (max-width: 768px) {
+      .card-wrap{flex:0 0 220px}
+      #themeToggle{font-size:0.85rem;padding:6px 10px}
+    }
   </style>
 </head>
 <body>
 
 <header>
+  <button id="themeToggle">☀️ Light</button>
   <h1 class="logo">A Dream Art</h1>
   <div id="hamburger"><span></span><span></span><span></span></div>
 </header>
@@ -85,7 +120,7 @@
       <option value="all">All Categories</option>
     </select>
   </div>
-  <div id="grid" class="grid"></div>
+  <div id="carouselContainer"></div>
 </section>
 
 <div id="modal" class="modal">
@@ -98,85 +133,257 @@
 </footer>
 
 <script>
-const hamburger=document.getElementById('hamburger');
-const sidebar=document.getElementById('sidebar');
-const overlay=document.getElementById('overlay');
-hamburger.onclick=()=>{hamburger.classList.toggle('active');sidebar.classList.toggle('show');overlay.classList.toggle('show');};
-overlay.onclick=()=>{hamburger.classList.remove('active');sidebar.classList.remove('show');overlay.classList.remove('show');};
-sidebar.querySelectorAll('a').forEach(a=>a.onclick=()=>{hamburger.classList.remove('active');sidebar.classList.remove('show');overlay.classList.remove('show');});
+// Theme Toggle
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+themeToggle.textContent = savedTheme === 'light' ? '🌙 Dark' : '☀️ Light';
 
-const grid=document.getElementById('grid');
-const modal=document.getElementById('modal');
-const modalImg=document.getElementById('modalImg');
-const modalClose=document.getElementById('modalClose');
-const searchInput=document.getElementById('searchInput');
-const categorySelect=document.getElementById('categorySelect');
+themeToggle.onclick = () => {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  themeToggle.textContent = newTheme === 'light' ? '🌙 Dark' : '☀️ Light';
+};
 
-let allWallpapers=[];
+// Hamburger Menu
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+hamburger.onclick = () => {
+  hamburger.classList.toggle('active');
+  sidebar.classList.toggle('show');
+  overlay.classList.toggle('show');
+};
+overlay.onclick = () => {
+  hamburger.classList.remove('active');
+  sidebar.classList.remove('show');
+  overlay.classList.remove('show');
+};
+sidebar.querySelectorAll('a').forEach(a => a.onclick = () => {
+  hamburger.classList.remove('active');
+  sidebar.classList.remove('show');
+  overlay.classList.remove('show');
+});
 
-function openModal(src){modalImg.src=src;modal.classList.add('show');document.body.style.overflow='hidden';}
-function closeModal(){modal.classList.remove('show');modalImg.src='';document.body.style.overflow='';}
-modalClose.onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal();};
+// Modal
+const modal = document.getElementById('modal');
+const modalImg = document.getElementById('modalImg');
+const modalClose = document.getElementById('modalClose');
 
-async function forceDownload(url,name){
-  const a=document.createElement('a');
-  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+function openModal(src) {
+  modalImg.src = src;
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
 }
 
-function buildGrid(list){
-  grid.innerHTML='';
-  if(list.length===0){grid.innerHTML='<p>No wallpapers found.</p>';return;}
-  list.forEach(it=>{
-    const wrap=document.createElement('div');
-    wrap.className='card-wrap';
-    wrap.innerHTML=`
+function closeModal() {
+  modal.classList.remove('show');
+  modalImg.src = '';
+  document.body.style.overflow = '';
+}
+
+modalClose.onclick = closeModal;
+modal.onclick = e => {
+  if (e.target === modal) closeModal();
+};
+
+// Download Function
+async function forceDownload(url, name) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+// Carousel State
+const carouselStates = {};
+
+function createCarousel(category, wallpapers) {
+  const section = document.createElement('div');
+  section.className = 'category-section';
+  
+  const header = document.createElement('div');
+  header.className = 'category-header';
+  header.innerHTML = `
+    <h3 class="category-title">${category}</h3>
+    <div class="carousel-controls">
+      <button class="carousel-btn prev" data-category="${category}">‹</button>
+      <button class="carousel-btn next" data-category="${category}">›</button>
+    </div>
+  `;
+  
+  const carouselContainer = document.createElement('div');
+  carouselContainer.className = 'carousel-container';
+  
+  const track = document.createElement('div');
+  track.className = 'carousel-track';
+  track.dataset.category = category;
+  
+  wallpapers.forEach(it => {
+    const wrap = document.createElement('div');
+    wrap.className = 'card-wrap';
+    wrap.innerHTML = `
       <div class="card-inner">
-        <div class="card-front"><img src="${it.thumb||it.image}" alt="${it.title||'Wallpaper'}"></div>
+        <div class="card-front"><img src="${it.thumb || it.image}" alt="${it.title || 'Wallpaper'}"></div>
         <div class="card-back">
-          <h3>${it.title||''}</h3>
+          <h3>${it.title || ''}</h3>
           <div style="display:flex;gap:10px;">
             <button class="btn preview">Preview</button>
             <button class="btn alt download">Download</button>
           </div>
         </div>
       </div>
-      <div class="caption">${it.title||''}</div>
+      <div class="caption">${it.title || ''}</div>
     `;
-    grid.appendChild(wrap);
-    const inner=wrap.querySelector('.card-inner');
-    inner.onclick=e=>{if(e.target.closest('button'))return;inner.classList.toggle('is-flipped');};
-    wrap.querySelector('.preview').onclick=e=>{e.stopPropagation();openModal(it.image);};
-    wrap.querySelector('.download').onclick=e=>{e.stopPropagation();forceDownload(it.image,it.title+'.jpg');};
+    track.appendChild(wrap);
+    
+    const inner = wrap.querySelector('.card-inner');
+    inner.onclick = e => {
+      if (e.target.closest('button')) return;
+      inner.classList.toggle('is-flipped');
+    };
+    wrap.querySelector('.preview').onclick = e => {
+      e.stopPropagation();
+      openModal(it.image);
+    };
+    wrap.querySelector('.download').onclick = e => {
+      e.stopPropagation();
+      forceDownload(it.image, it.title + '.jpg');
+    };
+  });
+  
+  carouselContainer.appendChild(track);
+  section.appendChild(header);
+  section.appendChild(carouselContainer);
+  
+  carouselStates[category] = { currentIndex: 0, track, wallpapers };
+  
+  return section;
+}
+
+function updateCarousel(category) {
+  const state = carouselStates[category];
+  const cardWidth = 280 + 22; // card width + gap
+  const offset = -state.currentIndex * cardWidth;
+  state.track.style.transform = `translateX(${offset}px)`;
+  
+  const prevBtn = document.querySelector(`.prev[data-category="${category}"]`);
+  const nextBtn = document.querySelector(`.next[data-category="${category}"]`);
+  
+  prevBtn.disabled = state.currentIndex === 0;
+  
+  const containerWidth = state.track.parentElement.offsetWidth;
+  const maxVisible = Math.floor(containerWidth / cardWidth);
+  const maxIndex = Math.max(0, state.wallpapers.length - maxVisible);
+  nextBtn.disabled = state.currentIndex >= maxIndex;
+}
+
+// Search and Filter
+const searchInput = document.getElementById('searchInput');
+const categorySelect = document.getElementById('categorySelect');
+const carouselContainer = document.getElementById('carouselContainer');
+
+let allWallpapers = [];
+
+function buildCarousels(wallpapers) {
+  carouselContainer.innerHTML = '';
+  
+  // Group by category
+  const grouped = {};
+  wallpapers.forEach(w => {
+    const tags = w.tags || ['Uncategorized'];
+    tags.forEach(tag => {
+      if (!grouped[tag]) grouped[tag] = [];
+      grouped[tag].push(w);
+    });
+  });
+  
+  // Create carousel for each category
+  Object.keys(grouped).sort().forEach(category => {
+    const carousel = createCarousel(category, grouped[category]);
+    carouselContainer.appendChild(carousel);
+    
+    // Initialize carousel position
+    setTimeout(() => updateCarousel(category), 0);
+  });
+  
+  // Add carousel navigation
+  document.querySelectorAll('.carousel-btn').forEach(btn => {
+    btn.onclick = () => {
+      const category = btn.dataset.category;
+      const state = carouselStates[category];
+      
+      if (btn.classList.contains('prev')) {
+        state.currentIndex = Math.max(0, state.currentIndex - 1);
+      } else {
+        const containerWidth = state.track.parentElement.offsetWidth;
+        const cardWidth = 280 + 22;
+        const maxVisible = Math.floor(containerWidth / cardWidth);
+        const maxIndex = Math.max(0, state.wallpapers.length - maxVisible);
+        state.currentIndex = Math.min(maxIndex, state.currentIndex + 1);
+      }
+      
+      updateCarousel(category);
+    };
   });
 }
 
-function updateFilters(){
-  const q=searchInput.value.toLowerCase();
-  const cat=categorySelect.value;
-  const filtered=allWallpapers.filter(w=>{
-    const matchSearch=w.title.toLowerCase().includes(q)||(w.description||'').toLowerCase().includes(q);
-    const matchCat=cat==='all'||(w.tags||[]).map(t=>t.toLowerCase()).includes(cat.toLowerCase());
-    return matchSearch&&matchCat;
+function updateFilters() {
+  const q = searchInput.value.toLowerCase();
+  const cat = categorySelect.value;
+  
+  const filtered = allWallpapers.filter(w => {
+    const matchSearch = w.title.toLowerCase().includes(q) || (w.description || '').toLowerCase().includes(q);
+    const matchCat = cat === 'all' || (w.tags || []).map(t => t.toLowerCase()).includes(cat.toLowerCase());
+    return matchSearch && matchCat;
   });
-  buildGrid(filtered);
+  
+  buildCarousels(filtered);
 }
 
-searchInput.oninput=updateFilters;
-categorySelect.onchange=updateFilters;
+searchInput.oninput = updateFilters;
+categorySelect.onchange = updateFilters;
 
-(async()=>{
-  const res=await fetch('wallpapers.json');
-  allWallpapers=await res.json();
+// Handle window resize
+window.addEventListener('resize', () => {
+  Object.keys(carouselStates).forEach(category => updateCarousel(category));
+});
 
-  // collect unique tags
-  const tagSet=new Set();
-  allWallpapers.forEach(w=>(w.tags||[]).forEach(t=>tagSet.add(t)));
-  [...tagSet].sort().forEach(tag=>{
-    const opt=document.createElement('option');
-    opt.value=tag;opt.textContent=tag;categorySelect.appendChild(opt);
+// Sample Data (Replace with actual wallpapers.json fetch)
+(async () => {
+  // Try to fetch wallpapers.json, fallback to sample data
+  try {
+    const res = await fetch('wallpapers.json');
+    allWallpapers = await res.json();
+  } catch (err) {
+    // Sample data for demonstration
+    allWallpapers = [
+      { title: 'Mountain Sunset', image: 'https://picsum.photos/800/1200?random=1', thumb: 'https://picsum.photos/400/600?random=1', tags: ['Nature', 'Landscape'] },
+      { title: 'Ocean Waves', image: 'https://picsum.photos/800/1200?random=2', thumb: 'https://picsum.photos/400/600?random=2', tags: ['Nature', 'Ocean'] },
+      { title: 'City Lights', image: 'https://picsum.photos/800/1200?random=3', thumb: 'https://picsum.photos/400/600?random=3', tags: ['Urban', 'Night'] },
+      { title: 'Forest Path', image: 'https://picsum.photos/800/1200?random=4', thumb: 'https://picsum.photos/400/600?random=4', tags: ['Nature', 'Forest'] },
+      { title: 'Desert Dunes', image: 'https://picsum.photos/800/1200?random=5', thumb: 'https://picsum.photos/400/600?random=5', tags: ['Nature', 'Desert'] },
+      { title: 'Urban Architecture', image: 'https://picsum.photos/800/1200?random=6', thumb: 'https://picsum.photos/400/600?random=6', tags: ['Urban', 'Architecture'] },
+      { title: 'Night Sky', image: 'https://picsum.photos/800/1200?random=7', thumb: 'https://picsum.photos/400/600?random=7', tags: ['Nature', 'Night'] },
+      { title: 'Tropical Beach', image: 'https://picsum.photos/800/1200?random=8', thumb: 'https://picsum.photos/400/600?random=8', tags: ['Nature', 'Ocean'] }
+    ];
+  }
+  
+  // Collect unique tags
+  const tagSet = new Set();
+  allWallpapers.forEach(w => (w.tags || []).forEach(t => tagSet.add(t)));
+  [...tagSet].sort().forEach(tag => {
+    const opt = document.createElement('option');
+    opt.value = tag;
+    opt.textContent = tag;
+    categorySelect.appendChild(opt);
   });
-
-  buildGrid(allWallpapers);
+  
+  buildCarousels(allWallpapers);
 })();
 </script>
 </body>
