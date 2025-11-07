@@ -4,294 +4,169 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>A Dream Art — Wallpapers</title>
-
-  <!-- Favicon -->
   <link rel="icon" href="https://ik.imagekit.io/h2tos5anh/photo_2025-11-07_09-52-15.jpg" type="image/png">
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* Reset & base */
     *{margin:0;padding:0;box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{font-family:'Poppins',sans-serif;color:#fff;background:#0d0d0d;overflow-x:hidden;line-height:1.6}
-    a{color:inherit}
-
-    /* Header */
+    body{font-family:'Poppins',sans-serif;background:#0d0d0d;color:#fff;line-height:1.6;overflow-x:hidden}
     header{padding:15px 20px;display:flex;flex-direction:column;align-items:center;background:#000;position:relative}
-    .header-logo{margin-bottom:10px}
     .logo{font-family:'Dancing Script',cursive;font-size:2.2rem;color:#fff;text-align:center}
-
-    /* Hamburger */
     #hamburger{position:absolute;top:20px;right:20px;width:25px;height:20px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;z-index:1001}
     #hamburger span{height:3px;background:#fff;border-radius:2px;transition:all 0.4s}
     #hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
     #hamburger.active span:nth-child(2){opacity:0}
     #hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-
-    /* Overlay & sidebar */
-    #overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);opacity:0;visibility:hidden;transition:opacity 0.4s;z-index:1040}
+    #overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);opacity:0;visibility:hidden;transition:opacity 0.4s;z-index:1040}
     #overlay.show{opacity:1;visibility:visible}
-    #sidebar{position:fixed;top:0;left:-300px;width:300px;height:100%;background:#111;display:flex;flex-direction:column;padding-top:80px;transition:transform 0.45s cubic-bezier(.77,0,.175,1);z-index:1050;transform:translateX(0)}
+    #sidebar{position:fixed;top:0;left:-300px;width:300px;height:100%;background:#111;display:flex;flex-direction:column;padding-top:80px;transition:transform 0.45s cubic-bezier(.77,0,.175,1);z-index:1050}
     #sidebar.show{transform:translateX(300px)}
-    #sidebar a{color:#fff;text-decoration:none;padding:15px 25px;font-weight:600;border-bottom:1px solid #333;transition:0.2s}
+    #sidebar a{color:#fff;text-decoration:none;padding:15px 25px;font-weight:600;border-bottom:1px solid #333}
     #sidebar a:hover{background:#fff;color:#000}
-
-    /* Page sections */
-    section{padding:40px 20px;max-width:1200px;margin:0 auto}
+    section{padding:40px 20px;max-width:1200px;margin:auto}
     .section-title{font-family:'Dancing Script',cursive;font-size:2rem;margin-bottom:10px}
-    .section-subtitle{font-size:1.2rem;font-weight:600;margin-bottom:18px}
-
-    /* Grid */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px;align-items:stretch}
+    .controls{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:25px;align-items:center}
+    .search-input,.category-select{padding:10px 14px;border:none;border-radius:8px;font-size:1rem}
+    .search-input{flex:1;min-width:220px}
+    .category-select{background:#fff;color:#000;font-weight:600}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px}
     .card-wrap{perspective:1000px}
-    /* card-inner contains both faces and flips */
     .card-inner{position:relative;width:100%;aspect-ratio:3/4;transform-style:preserve-3d;transition:transform .6s;cursor:pointer;border-radius:12px;overflow:hidden}
-    /* When flipped, rotate the whole inner */
     .card-inner.is-flipped{transform:rotateY(180deg)}
-
-    /* faces */
-    .card-front,
-    .card-back{
-      position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;overflow:hidden;box-shadow:0 8px 18px rgba(0,0,0,.5);
-      transition:transform .6s;
-    }
-
-    /* Front face: image */
-    .card-front{
-      transform:rotateY(0deg); /* default */
-      z-index:2;
-    }
-    .card-front img{width:100%;height:100%;object-fit:cover;display:block}
-
-    /* Back face: options; initially hidden by rotating 180deg */
-    .card-back{
-      background:#000;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:18px;text-align:center;
-      transform:rotateY(180deg); /* hidden */
-    }
-
-    /* IMPORTANT: explicit transformations for flipped state so image actually rotates and back becomes visible */
+    .card-front,.card-back{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;overflow:hidden;box-shadow:0 8px 18px rgba(0,0,0,.5)}
+    .card-front{transform:rotateY(0deg);z-index:2}
+    .card-front img{width:100%;height:100%;object-fit:cover}
+    .card-back{background:#000;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px;padding:18px;transform:rotateY(180deg)}
     .card-inner.is-flipped .card-front{transform:rotateY(180deg)}
-    .card-inner.is-flipped .card-back{transform:rotateY(360deg)} /* 360 => same as 0, ensures visible */
-
-    /* Buttons */
-    .btn{display:inline-block;padding:8px 14px;border-radius:999px;background:#fff;color:#000;font-weight:700;text-decoration:none;border:none;cursor:pointer}
+    .card-inner.is-flipped .card-back{transform:rotateY(360deg)}
+    .btn{padding:8px 14px;border-radius:999px;background:#fff;color:#000;font-weight:700;cursor:pointer;border:none}
     .btn.alt{background:transparent;border:2px solid #fff;color:#fff}
-    .caption{font-family:'Dancing Script',cursive;margin-top:10px;font-size:0.95rem;color:#fff;text-align:center}
-
-    /* Modal preview */
+    .caption{font-family:'Dancing Script',cursive;margin-top:10px;text-align:center}
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);z-index:2000;padding:20px}
     .modal.show{display:flex}
-    .modal-img{max-width:100%;max-height:90vh;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.7)}
+    .modal-img{max-width:100%;max-height:90vh;border-radius:8px}
     .modal-close{position:absolute;top:18px;right:18px;background:transparent;border:2px solid #fff;color:#fff;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
-
-    /* small helper text */
-    .small{font-size:.85rem;color:#ccc;margin-top:8px}
-
-    /* footer */
     footer{background:#000;padding:18px;text-align:center;color:#ccc;margin-top:40px}
     footer a{color:#fff;text-decoration:none;margin:0 6px}
-
-    /* Responsive tweaks */
-    @media(max-width:600px){
-      .section-title{font-size:1.6rem}
-      .card-inner{aspect-ratio:3/3.8}
-    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="header-logo"><h1 class="logo">A Dream Art</h1></div>
-    <div id="hamburger" aria-label="menu" role="button">
-      <span></span><span></span><span></span>
-    </div>
-  </header>
+<header>
+  <h1 class="logo">A Dream Art</h1>
+  <div id="hamburger"><span></span><span></span><span></span></div>
+</header>
 
-  <!-- overlay + sidebar -->
-  <div id="overlay"></div>
-  <div id="sidebar" aria-hidden="true">
-    <a href="/">Home</a>
-    <a href="/wallpapers/">Wallpapers</a>
-    <a href="/about/">About</a>
-    <a href="/contact/">Contact</a>
-    <a href="/privacy/">Privacy Policy</a>
+<div id="overlay"></div>
+<div id="sidebar">
+  <a href="/">Home</a>
+  <a href="/wallpapers/">Wallpapers</a>
+  <a href="/about/">About</a>
+  <a href="/contact/">Contact</a>
+  <a href="/privacy/">Privacy Policy</a>
+</div>
+
+<section>
+  <h2 class="section-title">Free Wallpapers</h2>
+  <div class="controls">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search wallpapers...">
+    <select id="categorySelect" class="category-select">
+      <option value="all">All Categories</option>
+    </select>
   </div>
+  <div id="grid" class="grid"></div>
+</section>
 
-  <!-- WALLPAPERS -->
-  <section id="wallpapers">
-    <h2 class="section-title">Free Wallpapers</h2>
-    <p class="section-subtitle">Download high-resolution wallpapers for free. Click/tap a card to flip the image and reveal options.</p>
+<div id="modal" class="modal">
+  <button id="modalClose" class="modal-close">Close</button>
+  <img id="modalImg" class="modal-img" alt="preview">
+</div>
 
-    <div id="grid" class="grid" aria-live="polite">
-      <!-- cards injected here -->
-    </div>
+<footer>
+  <p>&copy; 2025 A Dream Art. All rights reserved.</p>
+</footer>
 
-    <p class="small">All wallpapers are free to download. Respect the artist's license if provided.</p>
-  </section>
+<script>
+const hamburger=document.getElementById('hamburger');
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('overlay');
+hamburger.onclick=()=>{hamburger.classList.toggle('active');sidebar.classList.toggle('show');overlay.classList.toggle('show');};
+overlay.onclick=()=>{hamburger.classList.remove('active');sidebar.classList.remove('show');overlay.classList.remove('show');};
+sidebar.querySelectorAll('a').forEach(a=>a.onclick=()=>{hamburger.classList.remove('active');sidebar.classList.remove('show');overlay.classList.remove('show');});
 
-  <!-- PREVIEW MODAL -->
-  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <button id="modalClose" class="modal-close">Close</button>
-    <img id="modalImg" class="modal-img" alt="preview">
-  </div>
+const grid=document.getElementById('grid');
+const modal=document.getElementById('modal');
+const modalImg=document.getElementById('modalImg');
+const modalClose=document.getElementById('modalClose');
+const searchInput=document.getElementById('searchInput');
+const categorySelect=document.getElementById('categorySelect');
 
-  <!-- FOOTER -->
-  <footer>
-    <p>&copy; 2025 A Dream Art. All rights reserved.</p>
-    <p>
-      <a href="/">Home</a> |
-      <a href="/wallpapers/">Wallpapers</a> |
-      <a href="/privacy/">Privacy</a>
-    </p>
-  </footer>
+let allWallpapers=[];
 
-  <!-- Script: load JSON, build grid, preview & download -->
-  <script>
-    // Sidebar/hamburger logic (same as your TribleTunes)
-    const hamburger = document.getElementById('hamburger');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      sidebar.classList.toggle('show');
-      overlay.classList.toggle('show');
-    });
-    overlay.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      sidebar.classList.remove('show');
-      overlay.classList.remove('show');
-    });
-    sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      hamburger.classList.remove('active');
-      sidebar.classList.remove('show');
-      overlay.classList.remove('show');
-    }));
+function openModal(src){modalImg.src=src;modal.classList.add('show');document.body.style.overflow='hidden';}
+function closeModal(){modal.classList.remove('show');modalImg.src='';document.body.style.overflow='';}
+modalClose.onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal();};
 
-    // Modal helpers
-    const grid = document.getElementById('grid');
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modalImg');
-    const modalClose = document.getElementById('modalClose');
+async function forceDownload(url,name){
+  const a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+}
 
-    function openModal(src, alt) {
-      modalImg.src = src;
-      modalImg.alt = alt || 'Preview';
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeModal(){
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden','true');
-      modalImg.src = '';
-      document.body.style.overflow = '';
-    }
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+function buildGrid(list){
+  grid.innerHTML='';
+  if(list.length===0){grid.innerHTML='<p>No wallpapers found.</p>';return;}
+  list.forEach(it=>{
+    const wrap=document.createElement('div');
+    wrap.className='card-wrap';
+    wrap.innerHTML=`
+      <div class="card-inner">
+        <div class="card-front"><img src="${it.thumb||it.image}" alt="${it.title||'Wallpaper'}"></div>
+        <div class="card-back">
+          <h3>${it.title||''}</h3>
+          <div style="display:flex;gap:10px;">
+            <button class="btn preview">Preview</button>
+            <button class="btn alt download">Download</button>
+          </div>
+        </div>
+      </div>
+      <div class="caption">${it.title||''}</div>
+    `;
+    grid.appendChild(wrap);
+    const inner=wrap.querySelector('.card-inner');
+    inner.onclick=e=>{if(e.target.closest('button'))return;inner.classList.toggle('is-flipped');};
+    wrap.querySelector('.preview').onclick=e=>{e.stopPropagation();openModal(it.image);};
+    wrap.querySelector('.download').onclick=e=>{e.stopPropagation();forceDownload(it.image,it.title+'.jpg');};
+  });
+}
 
-    // Force-download helper: tries anchor download then fetch->blob fallback
-    async function forceDownload(url, filename){
-      try {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename || url.split('/').pop();
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-      } catch (e) {
-        console.warn('anchor download failed, will try fetch->blob', e);
-      }
+function updateFilters(){
+  const q=searchInput.value.toLowerCase();
+  const cat=categorySelect.value;
+  const filtered=allWallpapers.filter(w=>{
+    const matchSearch=w.title.toLowerCase().includes(q)||(w.description||'').toLowerCase().includes(q);
+    const matchCat=cat==='all'||(w.tags||[]).map(t=>t.toLowerCase()).includes(cat.toLowerCase());
+    return matchSearch&&matchCat;
+  });
+  buildGrid(filtered);
+}
 
-      try {
-        const res = await fetch(url, {mode: 'cors'});
-        if (!res.ok) throw new Error('Network response was not ok');
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a2 = document.createElement('a');
-        a2.href = blobUrl;
-        a2.download = filename || url.split('/').pop();
-        document.body.appendChild(a2);
-        a2.click();
-        a2.remove();
-        URL.revokeObjectURL(blobUrl);
-      } catch (err) {
-        console.error('fetch->blob download failed', err);
-        alert('Download failed. If images are hosted on an external domain, enable CORS or host images here.');
-      }
-    }
+searchInput.oninput=updateFilters;
+categorySelect.onchange=updateFilters;
 
-    // Build grid from wallpapers.json
-    (async function loadWallpapers(){
-      try{
-        const res = await fetch('wallpapers.json');
-        if(!res.ok) throw new Error('Failed to load wallpapers.json');
-        const items = await res.json();
-        if(!Array.isArray(items) || items.length === 0){
-          grid.innerHTML = '<p style="color:#fff">No wallpapers found.</p>'; return;
-        }
+(async()=>{
+  const res=await fetch('wallpapers.json');
+  allWallpapers=await res.json();
 
-        items.forEach((it, idx) => {
-          const wrap = document.createElement('div');
-          wrap.className = 'card-wrap';
-          wrap.innerHTML = `
-            <div class="card-inner" data-index="${idx}" tabindex="0">
-              <div class="card-front"><img loading="lazy" src="${it.thumb || it.image}" alt="${escapeHtml(it.title||'Wallpaper')}"></div>
-              <div class="card-back">
-                <h3>${escapeHtml(it.title || '')}</h3>
-                <div style="display:flex;gap:10px;">
-                  <button class="btn" data-action="preview">Preview</button>
-                  <button class="btn alt" data-action="download">Download</button>
-                </div>
-                <p class="small" style="margin-top:8px;color:#bbb;font-size:.85rem">${escapeHtml(it.description||'')}</p>
-              </div>
-            </div>
-            <div class="caption">${escapeHtml(it.caption || '')}</div>
-          `;
-          grid.appendChild(wrap);
+  // collect unique tags
+  const tagSet=new Set();
+  allWallpapers.forEach(w=>(w.tags||[]).forEach(t=>tagSet.add(t)));
+  [...tagSet].sort().forEach(tag=>{
+    const opt=document.createElement('option');
+    opt.value=tag;opt.textContent=tag;categorySelect.appendChild(opt);
+  });
 
-          const inner = wrap.querySelector('.card-inner');
-
-          // Flip on click/tap of the card itself (but NOT when clicking a button)
-          inner.addEventListener('click', (e) => {
-            // if clicked a button inside, don't toggle
-            if (e.target.closest('button')) return;
-            inner.classList.toggle('is-flipped');
-          });
-
-          // keyboard support: Enter toggles flip
-          inner.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inner.classList.toggle('is-flipped'); }
-          });
-
-          // Buttons: explicit handlers
-          const previewBtn = wrap.querySelector('button[data-action="preview"]');
-          const downloadBtn = wrap.querySelector('button[data-action="download"]');
-
-          previewBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation(); // important: prevent flipping
-            openModal(it.image, it.title);
-          });
-
-          downloadBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation(); // important: prevent flipping
-            const filename = (it.filename || ((it.title||'wallpaper').replace(/\s+/g,'_') + (it.ext || '.jpg')));
-            forceDownload(it.image, filename);
-          });
-        });
-      }catch(err){
-        console.error(err);
-        grid.innerHTML = '<p style="color:#fff">⚠️ Unable to load wallpapers.</p>';
-      }
-    })();
-
-    // small helper to avoid XSS in title/description
-    function escapeHtml(s){
-      if(!s) return '';
-      return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); });
-    }
-  </script>
+  buildGrid(allWallpapers);
+})();
+</script>
 </body>
 </html>
