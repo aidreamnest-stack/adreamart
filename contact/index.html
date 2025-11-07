@@ -97,11 +97,11 @@
 
 <div id="overlay"></div>
 <div id="sidebar">
-  <a href="./">Home</a>
-  <a href="./wallpapers/">Wallpapers</a>
-  <a href="./about/">About</a>
-  <a href="./contact/">Contact</a>
-  <a href="./privacy/">Privacy Policy</a>
+  <a href="/">Home</a>
+  <a href="/wallpapers/">Wallpapers</a>
+  <a href="/about/">About</a>
+  <a href="/contact/">Contact</a>
+  <a href="/privacy/">Privacy Policy</a>
 </div>
 
 
@@ -237,6 +237,17 @@ submitBtn.onclick = () => {
     }, 5000);
   }, 1500);
 };
+  // ✅ Fix sidebar link navigation on subpages
+document.querySelectorAll('#sidebar a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (href.startsWith('/')) {
+      e.preventDefault();
+      const fullURL = window.location.origin + '/adreamart' + href;
+      window.location.href = fullURL;
+    }
+  });
+});
 </script>
 </body>
 </html>
